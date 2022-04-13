@@ -1,0 +1,24 @@
+{
+  "name": "com.maellacour.experimentlibrary",
+  "version": "1.0.0",
+  "displayName": "Experiment Library",
+  "description": "A library to easily build experiment applications, and manage the inputs and outputs files in a standardized and clever way",
+  "unity": "2021.1",
+  "unityRelease": "0f1",
+  "dependencies": {
+    "com.maellacour.csvhelper": "27.2.1",
+    "com.unity.nuget.newtonsoft-json": "2.0.0"
+  },
+  "keywords": [
+    "Experiment",
+    "Library",
+    "Files"
+  ],
+  "license": "MPL-2.0",
+  "licensesUrl": "https://mozilla.org/MPL/2.0/",
+  "author": {
+    "name": "Mael Lacour",
+    "email": "public.dev@maellacour.com",
+    "url": "https://maellacour.com"
+  }
+}
