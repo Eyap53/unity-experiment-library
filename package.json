@@ -1,6 +1,6 @@
 {
   "name": "com.maellacour.experimentlibrary",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Experiment Library",
   "description": "A library to easily build experiment applications, and manage the inputs and outputs files in a standardized and clever way",
   "unity": "2021.1",
