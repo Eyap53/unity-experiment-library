@@ -1,6 +1,7 @@
 namespace ExperimentAppLibrary
 {
 	using CsvHelper;
+	using CsvHelper.Configuration;
 	using Newtonsoft.Json;
 	using System;
 	using System.Linq;
@@ -20,7 +21,8 @@ namespace ExperimentAppLibrary
 			return Path.Combine(GetInputsFolder(), participantId.ToString());
 		}
 
-		public static T[] ReadParticipantInput<T>(int participantId, string fileName)
+		public static T[] ReadParticipantInput<T>(int participantId, string fileName) => ReadParticipantInput<T, ClassMap>(participantId, fileName);
+		public static T[] ReadParticipantInput<T, UMap>(int participantId, string fileName) where UMap : ClassMap
 		{
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
@@ -29,10 +31,11 @@ namespace ExperimentAppLibrary
 
 			string participantPath = GetParticipantFolder(participantId);
 			string filePath = Path.Combine(participantPath, string.Format("{0}.csv", fileName));
-			return ReadCsvInput<T>(filePath);
+			return ReadCsvInput<T, UMap>(filePath);
 		}
 
-		public static T[] ReadCommonInput<T>(string fileName)
+		public static T[] ReadCommonInput<T>(string fileName) => ReadCommonInput<T, ClassMap>(fileName);
+		public static T[] ReadCommonInput<T, UMap>(string fileName) where UMap : ClassMap
 		{
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
@@ -40,10 +43,11 @@ namespace ExperimentAppLibrary
 			}
 
 			string filePath = Path.Combine(GetInputsFolder(), string.Format("{0}.csv", fileName));
-			return ReadCsvInput<T>(filePath);
+			return ReadCsvInput<T, UMap>(filePath);
 		}
 
-		public static T[] ReadCsvInput<T>(string filePath)
+		public static T[] ReadCsvInput<T>(string filePath) => ReadCsvInput<T, ClassMap>(filePath);
+		public static T[] ReadCsvInput<T, UMap>(string filePath) where UMap : ClassMap
 		{
 			if (string.IsNullOrWhiteSpace(filePath))
 			{
@@ -58,6 +62,7 @@ namespace ExperimentAppLibrary
 			using (var reader = new StreamReader(filePath))
 			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
 			{
+				csv.Context.RegisterClassMap<UMap>();
 				result = csv.GetRecords<T>().ToArray();
 			}
 			return result;
