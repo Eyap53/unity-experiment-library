@@ -11,6 +11,7 @@ namespace ExperimentAppLibrary
 
 	public class ExperimentOutputs
 	{
+
 		public static string GetOutputsFolder()
 		{
 			//'@' : prevent the escaping of characters with \. Really useful for paths.
@@ -28,8 +29,15 @@ namespace ExperimentAppLibrary
 		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
 		/// <param name="fileName">The file name to write to. The name should NOT include the extension (no .csv).</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteCommonOutput<T>(List<T> records, string fileName) => WriteCommonOutput<T, DefaultClassMap<T>>(records, fileName);
-		public static void WriteCommonOutput<T, UMap>(List<T> records, string fileName) where UMap : ClassMap
+		public static void WriteCommonOutput<T, UMap>(List<T> records, string fileName) where UMap : ClassMap => WriteCommonOutput<T>(records, fileName, ObjectResolver.Current.Resolve<UMap>());
+
+		/// <summary>
+		/// Write a common output data inside the output folder. Such data can be export of settings, ...
+		/// </summary>
+		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
+		/// <param name="fileName">The file name to write to. The name should NOT include the extension (no .csv).</param>
+		/// <typeparam name="T">The class type of answer.</typeparam>
+		public static void WriteCommonOutput<T>(List<T> records, string fileName, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -45,19 +53,8 @@ namespace ExperimentAppLibrary
 			Directory.CreateDirectory(outputFolder);
 			string writePath = Path.Combine(outputFolder, string.Format("{0}.csv", fileName));
 
-			WriteOutput<T, UMap>(records, writePath);
+			WriteOutput<T>(records, writePath, map);
 		}
-
-		/// <summary>
-		/// Write the participant data inside the output folder.
-		/// Note that the data will be overwritten, if any.
-		/// </summary>
-		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
-		/// <param name="participantId">The id of the participant.</param>
-		/// <param name="fileName">The file name to write to. The name should not includ the extension.</param>
-		/// <typeparam name="T">The class type of answer.</typeparam>
-		/// <returns></returns>
-		public static void WriteParticipantOutput<T>(List<T> records, int participantId, string fileName) => WriteParticipantOutput<T, DefaultClassMap<T>>(records, participantId, fileName);
 
 		/// <summary>
 		/// Write the participant data inside the output folder.
@@ -69,7 +66,18 @@ namespace ExperimentAppLibrary
 		/// <typeparam name="T">The class type of answer.</typeparam>
 		/// <typeparam name="UMap">The classMap type to override default mapping.</typeparam>
 		/// <returns></returns>
-		public static void WriteParticipantOutput<T, UMap>(List<T> records, int participantId, string fileName) where UMap : ClassMap
+		public static void WriteParticipantOutput<T, UMap>(List<T> records, int participantId, string fileName) where UMap : ClassMap => WriteParticipantOutput<T>(records, participantId, fileName, ObjectResolver.Current.Resolve<UMap>());
+
+		/// <summary>
+		/// Write the participant data inside the output folder.
+		/// Note that the data will be overwritten, if any.
+		/// </summary>
+		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
+		/// <param name="participantId">The id of the participant.</param>
+		/// <param name="fileName">The file name to write to. The name should not includ the extension.</param>
+		/// <typeparam name="T">The class type of answer.</typeparam>
+		/// <returns></returns>
+		public static void WriteParticipantOutput<T>(List<T> records, int participantId, string fileName, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -85,7 +93,7 @@ namespace ExperimentAppLibrary
 			Directory.CreateDirectory(participantPath);
 			string writePath = Path.Combine(participantPath, string.Format("{0}.csv", fileName));
 
-			WriteOutput<T, UMap>(records, writePath);
+			WriteOutput<T>(records, writePath, map);
 		}
 
 		/// <summary>
@@ -94,7 +102,7 @@ namespace ExperimentAppLibrary
 		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
 		/// <param name="fileName">The file path to write to. The name SHOULD include the extension.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteOutput<T>(List<T> records, string filepath) => WriteOutput<T, DefaultClassMap<T>>(records, filepath);
+		public static void WriteOutput<T, UMap>(List<T> records, string filepath) where UMap : ClassMap => WriteOutput<T>(records, filepath, ObjectResolver.Current.Resolve<UMap>());
 
 		/// <summary>
 		/// Write an output data given full path. Such data can be export of settings, ...
@@ -102,7 +110,7 @@ namespace ExperimentAppLibrary
 		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
 		/// <param name="fileName">The file path to write to. The name SHOULD include the extension.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteOutput<T, UMap>(List<T> records, string filepath) where UMap : ClassMap
+		public static void WriteOutput<T>(List<T> records, string filepath, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -117,7 +125,10 @@ namespace ExperimentAppLibrary
 			using (var writer = new StreamWriter(filepath))
 			using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
 			{
-				csv.Context.RegisterClassMap<UMap>();
+				if (map != null)
+				{
+					csv.Context.RegisterClassMap(map);
+				}
 				csv.WriteRecords(records);
 			}
 		}
@@ -130,8 +141,8 @@ namespace ExperimentAppLibrary
 		/// <param name="participantId">The id of the participant.</param>
 		/// <param name="fileName">The file name to write to. The name should not include the extension.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void AppendParticipantOutput<T>(List<T> records, int participantId, string fileName, bool createIfMissing = false) => AppendParticipantOutput<T>(records, participantId, fileName, createIfMissing);
-		public static void AppendParticipantOutput<T, UMap>(List<T> records, int participantId, string fileName, bool createIfMissing = false) where UMap : ClassMap
+		public static void AppendParticipantOutput<T, UMap>(List<T> records, int participantId, string fileName, bool createIfMissing = false) where UMap : ClassMap => AppendParticipantOutput<T>(records, participantId, fileName, createIfMissing, ObjectResolver.Current.Resolve<UMap>());
+		public static void AppendParticipantOutput<T>(List<T> records, int participantId, string fileName, bool createIfMissing = false, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -150,7 +161,7 @@ namespace ExperimentAppLibrary
 			{
 				if (createIfMissing)
 				{
-					WriteParticipantOutput<T, UMap>(records, participantId, fileName);
+					WriteParticipantOutput<T>(records, participantId, fileName, map);
 					return;
 				}
 				else
@@ -170,14 +181,17 @@ namespace ExperimentAppLibrary
 				using (var writer = new StreamWriter(stream))
 				using (var csv = new CsvWriter(writer, config))
 				{
-					csv.Context.RegisterClassMap<UMap>();
+					if (map != null)
+					{
+						csv.Context.RegisterClassMap(map);
+					}
 					csv.WriteRecords(records);
 				}
 			}
 		}
 
-		public static bool ReadParticipantOutput<T>(int participantId, string fileName, out T[] result) => ReadParticipantOutput<T>(participantId, fileName, out result);
-		public static bool ReadParticipantOutput<T, UMap>(int participantId, string fileName, out T[] result) where UMap : ClassMap
+		public static bool ReadParticipantOutput<T, UMap>(int participantId, string fileName, out T[] result) where UMap : ClassMap => ReadParticipantOutput<T>(participantId, fileName, out result, ObjectResolver.Current.Resolve<UMap>());
+		public static bool ReadParticipantOutput<T>(int participantId, string fileName, out T[] result, ClassMap map = null)
 		{
 			if (string.IsNullOrWhiteSpace(fileName))
 			{
@@ -197,7 +211,10 @@ namespace ExperimentAppLibrary
 				using (var reader = new StreamReader(readPath))
 				using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
 				{
-					csv.Context.RegisterClassMap<UMap>();
+					if (map != null)
+					{
+						csv.Context.RegisterClassMap(map);
+					}
 					result = csv.GetRecords<T>().ToArray();
 				}
 				return true;
