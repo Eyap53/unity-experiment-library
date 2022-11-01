@@ -28,7 +28,7 @@ namespace ExperimentAppLibrary
 		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
 		/// <param name="fileName">The file name to write to. The name should NOT include the extension (no .csv).</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteCommonOutput<T>(List<T> records, string fileName) => WriteCommonOutput<T, ClassMap>(records, fileName);
+		public static void WriteCommonOutput<T>(List<T> records, string fileName) => WriteCommonOutput<T, DefaultClassMap<T>>(records, fileName);
 		public static void WriteCommonOutput<T, UMap>(List<T> records, string fileName) where UMap : ClassMap
 		{
 			if (records is null)
@@ -57,7 +57,7 @@ namespace ExperimentAppLibrary
 		/// <param name="fileName">The file name to write to. The name should not includ the extension.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
 		/// <returns></returns>
-		public static void WriteParticipantOutput<T>(List<T> records, int participantId, string fileName) => WriteParticipantOutput<T, ClassMap>(records, participantId, fileName);
+		public static void WriteParticipantOutput<T>(List<T> records, int participantId, string fileName) => WriteParticipantOutput<T, DefaultClassMap<T>>(records, participantId, fileName);
 
 		/// <summary>
 		/// Write the participant data inside the output folder.
@@ -94,7 +94,7 @@ namespace ExperimentAppLibrary
 		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
 		/// <param name="fileName">The file path to write to. The name SHOULD include the extension.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteOutput<T>(List<T> records, string filepath) => WriteOutput<T, ClassMap>(records, filepath);
+		public static void WriteOutput<T>(List<T> records, string filepath) => WriteOutput<T, DefaultClassMap<T>>(records, filepath);
 
 		/// <summary>
 		/// Write an output data given full path. Such data can be export of settings, ...

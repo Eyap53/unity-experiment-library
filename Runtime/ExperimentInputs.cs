@@ -21,7 +21,7 @@ namespace ExperimentAppLibrary
 			return Path.Combine(GetInputsFolder(), participantId.ToString());
 		}
 
-		public static T[] ReadParticipantInput<T>(int participantId, string fileName) => ReadParticipantInput<T, ClassMap>(participantId, fileName);
+		public static T[] ReadParticipantInput<T>(int participantId, string fileName) => ReadParticipantInput<T, DefaultClassMap<T>>(participantId, fileName);
 		public static T[] ReadParticipantInput<T, UMap>(int participantId, string fileName) where UMap : ClassMap
 		{
 			if (string.IsNullOrWhiteSpace(fileName))
@@ -34,7 +34,7 @@ namespace ExperimentAppLibrary
 			return ReadCsvInput<T, UMap>(filePath);
 		}
 
-		public static T[] ReadCommonInput<T>(string fileName) => ReadCommonInput<T, ClassMap>(fileName);
+		public static T[] ReadCommonInput<T>(string fileName) => ReadCommonInput<T, DefaultClassMap<T>>(fileName);
 		public static T[] ReadCommonInput<T, UMap>(string fileName) where UMap : ClassMap
 		{
 			if (string.IsNullOrWhiteSpace(fileName))
@@ -46,7 +46,7 @@ namespace ExperimentAppLibrary
 			return ReadCsvInput<T, UMap>(filePath);
 		}
 
-		public static T[] ReadCsvInput<T>(string filePath) => ReadCsvInput<T, ClassMap>(filePath);
+		public static T[] ReadCsvInput<T>(string filePath) => ReadCsvInput<T, DefaultClassMap<T>>(filePath);
 		public static T[] ReadCsvInput<T, UMap>(string filePath) where UMap : ClassMap
 		{
 			if (string.IsNullOrWhiteSpace(filePath))
