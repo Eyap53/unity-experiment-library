@@ -30,7 +30,7 @@ namespace ExperimentAppLibrary
 			}
 
 			string participantPath = GetParticipantFolder(participantId);
-			string filePath = Path.Combine(participantPath, string.Format("{0}.csv", fileName));
+			string filePath = Path.Combine(participantPath, ExperimentUtilities.AddCsvExtension(fileName));
 			return ReadCsvInput<T>(filePath, map);
 		}
 
@@ -42,7 +42,7 @@ namespace ExperimentAppLibrary
 				throw new ArgumentException($"'{nameof(fileName)}' cannot be null or whitespace.", nameof(fileName));
 			}
 
-			string filePath = Path.Combine(GetInputsFolder(), string.Format("{0}.csv", fileName));
+			string filePath = Path.Combine(GetInputsFolder(), ExperimentUtilities.AddCsvExtension(fileName));
 			return ReadCsvInput<T>(filePath, map);
 		}
 

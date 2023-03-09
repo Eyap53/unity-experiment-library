@@ -51,7 +51,7 @@ namespace ExperimentAppLibrary
 
 			string outputFolder = GetOutputsFolder();
 			Directory.CreateDirectory(outputFolder);
-			string writePath = Path.Combine(outputFolder, string.Format("{0}.csv", fileName));
+			string writePath = Path.Combine(outputFolder, ExperimentUtilities.AddCsvExtension(fileName));
 
 			WriteOutput<T>(records, writePath, map);
 		}
@@ -91,7 +91,7 @@ namespace ExperimentAppLibrary
 
 			string participantPath = GetParticipantFolder(participantId);
 			Directory.CreateDirectory(participantPath);
-			string writePath = Path.Combine(participantPath, string.Format("{0}.csv", fileName));
+			string writePath = Path.Combine(participantPath, ExperimentUtilities.AddCsvExtension(fileName));
 
 			WriteOutput<T>(records, writePath, map);
 		}
@@ -155,7 +155,7 @@ namespace ExperimentAppLibrary
 			}
 
 			string participantPath = GetParticipantFolder(participantId);
-			string writePath = Path.Combine(participantPath, string.Format("{0}.csv", fileName));
+			string writePath = Path.Combine(participantPath, ExperimentUtilities.AddCsvExtension(fileName));
 
 			if (!File.Exists(writePath))
 			{
@@ -199,7 +199,7 @@ namespace ExperimentAppLibrary
 			}
 
 			string participantPath = GetParticipantFolder(participantId);
-			string readPath = Path.Combine(participantPath, string.Format("{0}.csv", fileName));
+			string readPath = Path.Combine(participantPath, ExperimentUtilities.AddCsvExtension(fileName));
 
 			if (!File.Exists(readPath))
 			{
