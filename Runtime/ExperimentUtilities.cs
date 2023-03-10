@@ -20,9 +20,13 @@ namespace ExperimentAppLibrary
 			}
 			else if (extension != ".csv")
 			{
-				throw new ArgumentException("File name extension is not .csv.");
+				// throw new ArgumentException("File name extension is not .csv.");
+				return fileName + ".csv";
 			}
-			return fileName;
+			else
+			{
+				return fileName;
+			}
 		}
     }
 }
