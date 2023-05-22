@@ -14,23 +14,23 @@ namespace ExperimentAppLibrary
 		[SerializeField]
 		protected ParticipantIndexSO _participantIndexSO;
 
-		void OnEnable()
+		protected virtual void OnEnable()
 		{
 			_participantIndexSO.OnValueChanged += UpdateDisplayParticipantFiles;
 		}
 
-		protected void Start()
+		protected virtual void Start()
 		{
 			_participantInputFieldText.text = _participantIndexSO.participantIndex.ToString();
 			UpdateDisplayParticipantFiles();
 		}
 
-		void OnDisable()
+		protected virtual void OnDisable()
 		{
 			_participantIndexSO.OnValueChanged -= UpdateDisplayParticipantFiles;
 		}
 
-		public void ApplyParticipantIndex(string input)
+		public virtual void ApplyParticipantIndex(string input)
 		{
 			if (int.TryParse(input, out int result))
 			{
@@ -42,7 +42,7 @@ namespace ExperimentAppLibrary
 			}
 		}
 
-		public int GetParticipantFilesCount()
+		public virtual int GetParticipantFilesCount()
 		{
 			string participantPath = ExperimentInputs.GetParticipantFolder(_participantIndexSO.participantIndex);
 			if (!Directory.Exists(participantPath))
