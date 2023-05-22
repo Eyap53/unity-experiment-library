@@ -7,7 +7,7 @@ A library to easily build experiment applications, and manage the inputs and out
 That package needs the CsvHelper library to work.
 You may add `https://gitlab.com/Eyap/csvhelper.git` as a git package inside the PackageManager to include this library.
 
-Then, this package can also be added via git url with `https://gitlab.com/Eyap/experimentlibrary.git`.
+Then, this package can also be added via git url with `https://gitlab.com/Eyap/experiment-library.git`.
 
 ## License
 

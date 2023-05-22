@@ -1,5 +1,5 @@
 {
-  "name": "com.maellacour.experimentlibrary",
+  "name": "com.maellacour.experiment-library",
   "version": "1.2.0",
   "displayName": "Experiment Library",
   "description": "A library to easily build experiment applications, and manage the inputs and outputs files in a standardized and clever way",
