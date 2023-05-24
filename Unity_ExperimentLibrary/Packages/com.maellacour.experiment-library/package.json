@@ -6,7 +6,7 @@
   "unity": "2021.1",
   "unityRelease": "0f1",
   "dependencies": {
-    "com.maellacour.csvhelper": "27.2.1",
+    "org.nuget.csvhelper": "30.0.1",
     "com.unity.nuget.newtonsoft-json": "2.0.0"
   },
   "keywords": [

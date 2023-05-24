@@ -5,9 +5,10 @@ A library to easily build experiment applications, and manage the inputs and out
 ## Adding the Package
 
 That package needs the CsvHelper library to work.
-You may add `https://gitlab.com/Eyap/csvhelper.git` as a git package inside the PackageManager to include this library.
+For that, you need to add the UnityNuget scope registry if you did not already.
+See : `https://github.com/xoofx/UnityNuGet`.
 
-Then, this package can also be added via git url with `https://gitlab.com/Eyap/experiment-library.git`.
+Then, this package can be added using open UPM. See : `https://openupm.com/packages/com.maellacour.experiment-library`
 
 ## License
 
