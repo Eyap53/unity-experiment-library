@@ -1,4 +1,4 @@
-namespace ExperimentAppLibrary
+namespace ExperimentLibrary
 {
 	using System;
 	using System.IO;

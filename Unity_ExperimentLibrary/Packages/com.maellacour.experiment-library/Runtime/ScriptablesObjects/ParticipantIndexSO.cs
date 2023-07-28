@@ -1,9 +1,9 @@
-namespace ExperimentAppLibrary
+namespace ExperimentLibrary
 {
 	using UnityEngine;
 	using UnityEngine.Events;
 
-	[CreateAssetMenu(menuName = "ExperimentAppLibrary/Participant Index", fileName = "ParticipantIndexSO")]
+	[CreateAssetMenu(menuName = "ExperimentLibrary/Participant Index", fileName = "ParticipantIndexSO")]
 	public class ParticipantIndexSO : ScriptableObject
 	{
 		[TextArea]

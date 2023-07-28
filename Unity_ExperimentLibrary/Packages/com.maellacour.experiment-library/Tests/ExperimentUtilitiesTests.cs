@@ -1,4 +1,4 @@
-namespace ExperimentAppLibrary.Tests
+namespace ExperimentLibrary.Tests
 {
 	using NUnit.Framework;
 	using System;

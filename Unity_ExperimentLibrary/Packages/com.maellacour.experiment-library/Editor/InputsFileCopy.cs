@@ -1,4 +1,4 @@
-namespace ExperimentAppLibrary.Editor
+namespace ExperimentLibrary.Editor
 {
 	using System.IO;
 	using UnityEditor.Build;
@@ -11,11 +11,11 @@ namespace ExperimentAppLibrary.Editor
 
 		public void OnPostprocessBuild(BuildReport report)
 		{
-			string inputsFolder = ExperimentAppLibrary.ExperimentInputs.GetInputsFolder();
+			string inputsFolder = ExperimentLibrary.ExperimentInputs.GetInputsFolder();
 			if (Directory.Exists(inputsFolder))
 			{
 				string destFolder = Path.Combine(Path.Combine(Path.GetDirectoryName(report.summary.outputPath), string.Format("{0}_Data", Path.GetFileNameWithoutExtension(report.summary.outputPath))), "Inputs");
-				DirectoryExtensions.Copy(ExperimentAppLibrary.ExperimentInputs.GetInputsFolder(), destFolder, true, new string[] { "meta" });
+				DirectoryExtensions.Copy(ExperimentLibrary.ExperimentInputs.GetInputsFolder(), destFolder, true, new string[] { "meta" });
 			}
 		}
 	}
