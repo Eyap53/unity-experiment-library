@@ -1,5 +1,5 @@
 {
-    "name": "ExperimentAppLibrary.Tests",
+    "name": "ExperimentLibrary.Tests",
     "rootNamespace": "",
     "references": [
         "ExperimentLibrary",

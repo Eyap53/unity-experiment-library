@@ -1,6 +1,5 @@
-namespace ExperimentAppLibrary.Tests
+namespace ExperimentLibrary.Tests
 {
-	using ExperimentAppLibrary;
 	using NUnit.Framework;
 	using System;
 	using System.Collections;

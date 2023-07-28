@@ -1,4 +1,4 @@
-namespace ExperimentAppLibrary
+namespace ExperimentLibrary
 {
 	using System;
 	using System.IO;
@@ -12,15 +12,15 @@ namespace ExperimentAppLibrary
 		void OnDestroy()
 		{
 			// Save the Log inside participant folder.
-			string participantFolderPath = ExperimentOutputs.GetParticipantFolder(_participantIndexSO.participantIndex);
 			string logFilePath = Application.consoleLogPath;
 			string saveLogFileName = string.Format("LogSave.{0}.log", DateTime.Now.ToString("yy-MM-dd.HH-mm-ss"));
+			string participantFolderPath = ExperimentOutputs.GetParticipantFolder(_participantIndexSO.participantIndex);
 			string saveLogFilePath = Path.Combine(participantFolderPath, saveLogFileName);
 
 			try
 			{
 				Directory.CreateDirectory(participantFolderPath);
-				File.Copy(Application.consoleLogPath, saveLogFilePath);
+				File.Copy(logFilePath, saveLogFilePath);
 			}
 			catch (System.Exception e)
 			{
