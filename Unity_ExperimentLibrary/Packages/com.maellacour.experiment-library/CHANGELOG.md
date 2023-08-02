@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2023-08-02
+### Added
+- Added AppendOutput to replace WriteOutput.
+- AppendOutput Add data at the end of the file.
+- AppendOutput add the header if file missing or empty.
+- Tests for methods of ExperimentOutputs.
+
+### Changed
+- WriteOutput is now marked obsolete (replaced by AppendOutput).
+
+
 ## [2.0.1] - 2023-07-28
 ### Added
 - Add WriteOutput method.

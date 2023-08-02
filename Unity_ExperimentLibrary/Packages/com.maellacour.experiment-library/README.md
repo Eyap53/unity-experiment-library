@@ -1,5 +1,7 @@
 # ExperimentLibrary
 
+[![openupm](https://img.shields.io/npm/v/com.maellacour.experiment-library?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.maellacour.experiment-library/)
+
 A library to easily build experiment applications, and manage the inputs and outputs files in a standardized and clever way.
 
 ## Adding the Package
