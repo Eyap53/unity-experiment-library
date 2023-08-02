@@ -133,8 +133,13 @@ namespace ExperimentLibrary
 			}
 		}
 
-		public static void WriteOutput<T, UMap>(T record, string filepath) where UMap : ClassMap => WriteOutput<T>(record, filepath, ObjectResolver.Current.Resolve<UMap>());
-		public static void WriteOutput<T>(T record, string filepath, ClassMap map = null)
+		[Obsolete("WriteOutput is deprecated, please use AppendOutput instead.")]
+		public static void WriteOutput<T, UMap>(T record, string filepath) where UMap : ClassMap => AppendOutput<T, UMap>(record, filepath);
+		[Obsolete("WriteOutput is deprecated, please use AppendOutput instead.")]
+		public static void WriteOutput<T>(T record, string filepath, ClassMap map = null) => AppendOutput(record, filepath, map);
+
+		public static void AppendOutput<T, UMap>(T record, string filepath) where UMap : ClassMap => WriteOutput<T>(record, filepath, ObjectResolver.Current.Resolve<UMap>());
+		public static void AppendOutput<T>(T record, string filepath, ClassMap map = null)
 		{
 			if (record is null)
 			{
@@ -146,9 +151,18 @@ namespace ExperimentLibrary
 				throw new ArgumentException($"'{nameof(filepath)}' cannot be null or whitespace.", nameof(filepath));
 			}
 
-			using (var writer = new StreamWriter(filepath))
-			using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+			bool fileMissingOrEmpty = !File.Exists(filepath) || new FileInfo(filepath).Length == 0;
+
+			using (var stream = File.Open(writePath, FileMode.Append))
+			using (var writer = new StreamWriter(stream))
+			using (var csv = new CsvWriter(writer, config))
 			{
+				if (fileMissingOrEmpty)
+				{
+					csv.WriteHeader<T>();
+					csv.NextRecord();
+				}
+
 				if (map != null)
 				{
 					csv.Context.RegisterClassMap(map);
