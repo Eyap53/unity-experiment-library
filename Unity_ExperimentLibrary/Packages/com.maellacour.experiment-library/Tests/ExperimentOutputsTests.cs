@@ -121,6 +121,87 @@ namespace ExperimentLibrary.Tests
 			}
 		}
 
+		[Test]
+		public void Test_AppendParticipantOutputs()
+		{
+			// Arrange
+			int participantId = 123;
+			string fileName = "participant_test";
+			var records = new List<TestClass>
+			{
+				new TestClass { Id = 1, Name = "Alice" },
+				new TestClass { Id = 2, Name = "Bob" }
+			};
+			string participantFolder = ExperimentOutputs.GetParticipantFolder(participantId);
+			string filePath = Path.Combine(participantFolder, ExperimentUtilities.AddCsvExtension(fileName));
+
+			// Act
+			ExperimentOutputs.AppendParticipantOutputs(records, participantId, fileName, createIfMissing: true);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+		}
+
+		[Test]
+		public void Test_ReadParticipantOutputs()
+		{
+			// Arrange
+			int participantId = 123;
+			string fileName = "participant_test";
+			var records = new List<TestClass>
+			{
+				new TestClass { Id = 1, Name = "Alice" },
+				new TestClass { Id = 2, Name = "Bob" }
+			};
+			string participantFolder = ExperimentOutputs.GetParticipantFolder(participantId);
+			string filePath = Path.Combine(participantFolder, ExperimentUtilities.AddCsvExtension(fileName));
+			using (var writer = new StreamWriter(filePath))
+			using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+			{
+				csv.WriteRecords(records);
+			}
+
+			// Act
+			bool success = ExperimentOutputs.ReadParticipantOutputs(participantId, fileName, out TestClass[] result);
+
+			// Assert
+			Assert.IsTrue(success);
+			Assert.IsNotNull(result);
+			Assert.AreEqual(records.Count, result.Length);
+			for (int i = 0; i < records.Count; i++)
+			{
+				Assert.AreEqual(records[i].Id, result[i].Id);
+				Assert.AreEqual(records[i].Name, result[i].Name);
+			}
+		}
+
+		[Test]
+		public void Test_ReadParticipantOutputs_NonExistentFile()
+		{
+			// Arrange
+			int participantId = 456;
+			string fileName = "non_existent_file";
+
+			// Act
+			bool success = ExperimentOutputs.ReadParticipantOutputs(participantId, fileName, out TestClass[] result);
+
+			// Assert
+			Assert.IsFalse(success);
+			Assert.IsNull(result);
+		}
+
 		private class TestClass
 		{
 			public int Id { get; set; }
