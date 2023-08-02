@@ -138,7 +138,7 @@ namespace ExperimentLibrary
 		[Obsolete("WriteOutput is deprecated, please use AppendOutput instead.")]
 		public static void WriteOutput<T>(T record, string filepath, ClassMap map = null) => AppendOutput(record, filepath, map);
 
-		public static void AppendOutput<T, UMap>(T record, string filepath) where UMap : ClassMap => WriteOutput<T>(record, filepath, ObjectResolver.Current.Resolve<UMap>());
+		public static void AppendOutput<T, UMap>(T record, string filepath) where UMap : ClassMap => AppendOutput<T>(record, filepath, ObjectResolver.Current.Resolve<UMap>());
 		public static void AppendOutput<T>(T record, string filepath, ClassMap map = null)
 		{
 			if (record is null)
@@ -153,20 +153,20 @@ namespace ExperimentLibrary
 
 			bool fileMissingOrEmpty = !File.Exists(filepath) || new FileInfo(filepath).Length == 0;
 
-			using (var stream = File.Open(writePath, FileMode.Append))
+			using (var stream = File.Open(filepath, FileMode.Append))
 			using (var writer = new StreamWriter(stream))
-			using (var csv = new CsvWriter(writer, config))
+			using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
 			{
-				if (fileMissingOrEmpty)
-				{
-					csv.WriteHeader<T>();
-					csv.NextRecord();
-				}
-
 				if (map != null)
 				{
 					csv.Context.RegisterClassMap(map);
 				}
+
+				if (fileMissingOrEmpty)
+				{
+					csv.WriteHeader<T>();
+				}
+				csv.NextRecord();
 				csv.WriteRecord(record);
 			}
 		}
