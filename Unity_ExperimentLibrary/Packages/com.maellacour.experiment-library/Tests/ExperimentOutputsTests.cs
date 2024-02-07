@@ -72,7 +72,7 @@ namespace ExperimentLibrary.Tests
 		// }
 
 		[Test]
-		public void Test_WriteCommonOutputs()
+		public void Test_WriteCommonOutputs_Base()
 		{
 			// Arrange
 			var records = new List<TestClass>
@@ -105,7 +105,114 @@ namespace ExperimentLibrary.Tests
 		}
 
 		[Test]
-		public void Test_WriteParticipantOutputs()
+		public void Test_WriteCommonOutputs_OverrideFile()
+		{
+			// Arrange
+			var records = new List<TestClass>
+			{
+				new() { Id = 1, Name = "Alice" },
+				new() { Id = 2, Name = "Bob" }
+			};
+			string outputFolder = ExperimentOutputs.GetOutputsFolder();
+			string filePath = Path.Combine(outputFolder, ExperimentUtilities.AddCsvExtension(CommonTestFilename));
+
+			// Act
+			ExperimentOutputs.WriteCommonOutputs(records, CommonTestFilename);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+
+			// Act
+			records = new List<TestClass>
+			{
+				new() { Id = 3, Name = "Charlie" }
+			};
+			ExperimentOutputs.WriteCommonOutputs(records, CommonTestFilename);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+		}
+
+		[Test]
+		public void Test_WriteCommonOutputs_Append()
+		{
+			// Arrange
+			var records = new List<TestClass>
+			{
+				new() { Id = 1, Name = "Alice" },
+				new() { Id = 2, Name = "Bob" }
+			};
+			string outputFolder = ExperimentOutputs.GetOutputsFolder();
+			string filePath = Path.Combine(outputFolder, ExperimentUtilities.AddCsvExtension(CommonTestFilename));
+
+			// Act
+			ExperimentOutputs.WriteCommonOutputs(records, CommonTestFilename);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+
+			// Act
+			records = new List<TestClass>
+			{
+				new() { Id = 3, Name = "Charlie" }
+			};
+			ExperimentOutputs.WriteCommonOutputs(records, CommonTestFilename, append: true);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(3, result.Count);
+				Assert.AreEqual(1, result[0].Id);
+				Assert.AreEqual("Alice", result[0].Name);
+				Assert.AreEqual(2, result[1].Id);
+				Assert.AreEqual("Bob", result[1].Name);
+				Assert.AreEqual(3, result[2].Id);
+				Assert.AreEqual("Charlie", result[2].Name);
+			}
+		}
+
+		[Test]
+		public void Test_WriteParticipantOutputs_Base()
 		{
 			// Arrange
 			string fileName = "participant_test";
@@ -136,6 +243,114 @@ namespace ExperimentLibrary.Tests
 			}
 		}
 
+		[Test]
+		public void Test_WriteParticipantOutputs_OverrideFile()
+		{
+			// Arrange
+			string fileName = "participant_test";
+			var records = new List<TestClass>
+			{
+				new() { Id = 1, Name = "Alice" },
+				new() { Id = 2, Name = "Bob" }
+			};
+			string participantFolder = ExperimentOutputs.GetParticipantFolder(TestParticipantIndex);
+			string filePath = Path.Combine(participantFolder, ExperimentUtilities.AddCsvExtension(fileName));
+
+			// Act
+			ExperimentOutputs.WriteParticipantOutputs(records, TestParticipantIndex, fileName);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+
+			// Act
+			records = new List<TestClass>
+			{
+				new() { Id = 3, Name = "Charlie" }
+			};
+			ExperimentOutputs.WriteParticipantOutputs(records, TestParticipantIndex, fileName);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+		}
+
+		[Test]
+		public void Test_WriteParticipantOutputs_Append()
+		{
+			// Arrange
+			string fileName = "participant_test";
+			var records = new List<TestClass>
+			{
+				new() { Id = 1, Name = "Alice" },
+				new() { Id = 2, Name = "Bob" }
+			};
+			string participantFolder = ExperimentOutputs.GetParticipantFolder(TestParticipantIndex);
+			string filePath = Path.Combine(participantFolder, ExperimentUtilities.AddCsvExtension(fileName));
+
+			// Act
+			ExperimentOutputs.WriteParticipantOutputs(records, TestParticipantIndex, fileName);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(records.Count, result.Count);
+				for (int i = 0; i < records.Count; i++)
+				{
+					Assert.AreEqual(records[i].Id, result[i].Id);
+					Assert.AreEqual(records[i].Name, result[i].Name);
+				}
+			}
+
+			// Act
+			records = new List<TestClass>
+			{
+				new() { Id = 3, Name = "Charlie" }
+			};
+			ExperimentOutputs.WriteParticipantOutputs(records, TestParticipantIndex, fileName, append: true);
+
+			// Assert
+			Assert.IsTrue(File.Exists(filePath));
+
+			using (var reader = new StreamReader(filePath))
+			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+			{
+				var result = csv.GetRecords<TestClass>().ToList();
+				Assert.AreEqual(3, result.Count);
+				Assert.AreEqual(1, result[0].Id);
+				Assert.AreEqual("Alice", result[0].Name);
+				Assert.AreEqual(2, result[1].Id);
+				Assert.AreEqual("Bob", result[1].Name);
+				Assert.AreEqual(3, result[2].Id);
+				Assert.AreEqual("Charlie", result[2].Name);
+			}
+		}
 
 		[Test]
 		public void Test_WriteOutputs_Base()
@@ -289,38 +504,6 @@ namespace ExperimentLibrary.Tests
 			{
 				ExperimentOutputs.AppendOutput(record, filePath);
 			}
-
-			// Assert
-			Assert.IsTrue(File.Exists(filePath));
-
-			using (var reader = new StreamReader(filePath))
-			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-			{
-				var result = csv.GetRecords<TestClass>().ToList();
-				Assert.AreEqual(records.Count, result.Count);
-				for (int i = 0; i < records.Count; i++)
-				{
-					Assert.AreEqual(records[i].Id, result[i].Id);
-					Assert.AreEqual(records[i].Name, result[i].Name);
-				}
-			}
-		}
-
-		[Test]
-		public void Test_AppendParticipantOutputs()
-		{
-			// Arrange
-			string fileName = "participant_test";
-			var records = new List<TestClass>
-			{
-				new() { Id = 1, Name = "Alice" },
-				new() { Id = 2, Name = "Bob" }
-			};
-			string participantFolder = ExperimentOutputs.GetParticipantFolder(TestParticipantIndex);
-			string filePath = Path.Combine(participantFolder, ExperimentUtilities.AddCsvExtension(fileName));
-
-			// Act
-			ExperimentOutputs.AppendParticipantOutputs(records, TestParticipantIndex, fileName, createIfMissing: true);
 
 			// Assert
 			Assert.IsTrue(File.Exists(filePath));
