@@ -179,61 +179,12 @@ namespace ExperimentLibrary
 			}
 		}
 
-		/// <summary>
-		/// Append to existing file the participant data, inside the output folder.
-		/// Can be useful to write data when recorded to avoid StackOverflow at the end or losing too much data in case of a Unity crash.
-		/// </summary>
-		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
-		/// <param name="participantId">The id of the participant.</param>
-		/// <param name="fileName">The file name to write to. The name should not include the extension.</param>
-		/// <typeparam name="T">The class type of answer.</typeparam>
+		[Obsolete("AppendParticipantOutputs is deprecated, please use WriteParticipantOutputs with append:true instead.")]
 		public static void AppendParticipantOutputs<T, UMap>(List<T> records, int participantId, string fileName, bool createIfMissing = false) where UMap : ClassMap => AppendParticipantOutputs<T>(records, participantId, fileName, createIfMissing, ObjectResolver.Current.Resolve<UMap>());
+		[Obsolete("AppendParticipantOutputs is deprecated, please use WriteParticipantOutputs with append:true instead.")]
 		public static void AppendParticipantOutputs<T>(List<T> records, int participantId, string fileName, bool createIfMissing = false, ClassMap map = null)
 		{
-			if (records is null)
-			{
-				throw new ArgumentNullException(nameof(records));
-			}
-
-			if (string.IsNullOrWhiteSpace(fileName))
-			{
-				throw new ArgumentException($"'{nameof(fileName)}' cannot be null or whitespace.", nameof(fileName));
-			}
-
-			string participantPath = GetParticipantFolder(participantId);
-			string writePath = Path.Combine(participantPath, ExperimentUtilities.AddCsvExtension(fileName));
-
-			if (!File.Exists(writePath))
-			{
-				if (createIfMissing)
-				{
-					WriteParticipantOutputs<T>(records, participantId, fileName, map);
-					return;
-				}
-				else
-				{
-					throw new ArgumentException("The file does not exist !", fileName);
-				}
-			}
-			else
-			{
-				var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-				{
-					// Don't write the header again.
-					HasHeaderRecord = false,
-				};
-
-				using (var stream = File.Open(writePath, FileMode.Append))
-				using (var writer = new StreamWriter(stream))
-				using (var csv = new CsvWriter(writer, config))
-				{
-					if (map != null)
-					{
-						csv.Context.RegisterClassMap(map);
-					}
-					csv.WriteRecords(records);
-				}
-			}
+			WriteParticipantOutputs(records, participantId, fileName, append: true, map: map);
 		}
 
 		public static bool ReadParticipantOutputs<T, UMap>(int participantId, string fileName, out T[] result) where UMap : ClassMap => ReadParticipantOutputs<T>(participantId, fileName, out result, ObjectResolver.Current.Resolve<UMap>());
