@@ -53,7 +53,7 @@ namespace ExperimentLibrary
 			Directory.CreateDirectory(outputFolder);
 			string writePath = Path.Combine(outputFolder, ExperimentUtilities.AddCsvExtension(fileName));
 
-			WriteOutputs<T>(records, writePath, map);
+			WriteOutputs<T>(records, writePath, map: map);
 		}
 
 		/// <summary>
@@ -93,24 +93,23 @@ namespace ExperimentLibrary
 			Directory.CreateDirectory(participantPath);
 			string writePath = Path.Combine(participantPath, ExperimentUtilities.AddCsvExtension(fileName));
 
-			WriteOutputs<T>(records, writePath, map);
+			WriteOutputs<T>(records, writePath, map: map);
 		}
 
-		/// <summary>
-		/// Write an output data given full path. Such data can be export of settings, ...
-		/// </summary>
-		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
-		/// <param name="fileName">The file path to write to. The name SHOULD include the extension.</param>
-		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteOutputs<T, UMap>(List<T> records, string filepath) where UMap : ClassMap => WriteOutputs<T>(records, filepath, ObjectResolver.Current.Resolve<UMap>());
+		/// <inheritdoc cref="WriteOutputs{T}(List{T}, string, ClassMap, bool)"/>
+		///  <typeparam name="UMap">The classMap type to override default mapping.</typeparam>
+		public static void WriteOutputs<T, UMap>(List<T> records, string filepath, bool append = false) where UMap : ClassMap => WriteOutputs<T>(records, filepath, append: append, map: ObjectResolver.Current.Resolve<UMap>());
 
 		/// <summary>
-		/// Write an output data given full path. Such data can be export of settings, ...
+		/// Write the outputs data given full path.
+		/// Such data can be export of settings, or any IEnumarable of T.
 		/// </summary>
 		/// <param name="records">The values that needs to be saved. Usually responses from participants.</param>
 		/// <param name="fileName">The file path to write to. The name SHOULD include the extension.</param>
+		/// <param name="map">The classMap type to override default mapping.</param>
+		/// <param name="append">If true, the data will be appended to the file, otherwise it will be overwritten. Default is overriding the file.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteOutputs<T>(List<T> records, string filepath, ClassMap map = null)
+		public static void WriteOutputs<T>(List<T> records, string filepath, bool append = false, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -122,8 +121,17 @@ namespace ExperimentLibrary
 				throw new ArgumentException($"'{nameof(filepath)}' cannot be null or whitespace.", nameof(filepath));
 			}
 
-			using (var writer = new StreamWriter(filepath))
-			using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+			CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture);
+
+			bool fileMissingOrEmpty = !File.Exists(filepath) || new FileInfo(filepath).Length == 0;
+			if (!fileMissingOrEmpty && append)
+			{
+				// Don't write the header again.
+				config.HasHeaderRecord = false;
+			}
+
+			using (var writer = new StreamWriter(filepath, append))
+			using (var csv = new CsvWriter(writer, config))
 			{
 				if (map != null)
 				{
