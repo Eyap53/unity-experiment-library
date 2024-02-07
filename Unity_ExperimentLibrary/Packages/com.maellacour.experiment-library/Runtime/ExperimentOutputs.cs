@@ -32,9 +32,9 @@ namespace ExperimentLibrary
 			return Path.Combine(GetOutputsFolder(), participantId.ToString());
 		}
 
-		/// <inheritdoc cref="WriteCommonOutputs{T}(List{T}, string, bool, ClassMap)"/>
+		/// <inheritdoc cref="WriteCommonOutputs{T}(IEnumerable{T}, string, bool, ClassMap)"/>
 		/// <typeparam name="UMap">The classMap type to override default mapping.</typeparam>
-		public static void WriteCommonOutputs<T, UMap>(List<T> records, string fileName, bool append = false) where UMap : ClassMap => WriteCommonOutputs<T>(records, fileName, append: append, map: ObjectResolver.Current.Resolve<UMap>());
+		public static void WriteCommonOutputs<T, UMap>(IEnumerable<T> records, string fileName, bool append = false) where UMap : ClassMap => WriteCommonOutputs<T>(records, fileName, append: append, map: ObjectResolver.Current.Resolve<UMap>());
 
 		/// <summary>
 		/// Write a common output data inside the output folder. Such data can be export of settings, ...
@@ -44,7 +44,7 @@ namespace ExperimentLibrary
 		/// <param name="append">If true, the data will be appended to the file, otherwise it will be overwritten. Default is overriding the file.</param>
 		/// <param name="map">The classMap type to override default mapping.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
-		public static void WriteCommonOutputs<T>(List<T> records, string fileName, bool append = false, ClassMap map = null)
+		public static void WriteCommonOutputs<T>(IEnumerable<T> records, string fileName, bool append = false, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -63,10 +63,10 @@ namespace ExperimentLibrary
 			WriteOutputs<T>(records, writePath, append: append, map: map);
 		}
 
-		/// <inheritdoc cref="WriteParticipantOutputs{T}(List{T}, int, string, bool, ClassMap)"/>
+		/// <inheritdoc cref="WriteParticipantOutputs{T}(IEnumerable{T}, int, string, bool, ClassMap)"/>
 		/// <typeparam name="UMap">The classMap type to override default mapping.</typeparam>
 		/// <returns></returns>
-		public static void WriteParticipantOutputs<T, UMap>(List<T> records, int participantId, string fileName, bool append = false) where UMap : ClassMap => WriteParticipantOutputs<T>(records, participantId, fileName, append: append, map: ObjectResolver.Current.Resolve<UMap>());
+		public static void WriteParticipantOutputs<T, UMap>(IEnumerable<T> records, int participantId, string fileName, bool append = false) where UMap : ClassMap => WriteParticipantOutputs<T>(records, participantId, fileName, append: append, map: ObjectResolver.Current.Resolve<UMap>());
 
 		/// <summary>
 		/// Write the participant data inside the output folder.
@@ -79,7 +79,7 @@ namespace ExperimentLibrary
 		/// <param name="map">The classMap type to override default mapping.</param>
 		/// <typeparam name="T">The class type of answer.</typeparam>
 		/// <returns></returns>
-		public static void WriteParticipantOutputs<T>(List<T> records, int participantId, string fileName, bool append = false, ClassMap map = null)
+		public static void WriteParticipantOutputs<T>(IEnumerable<T> records, int participantId, string fileName, bool append = false, ClassMap map = null)
 		{
 			if (records is null)
 			{
@@ -98,9 +98,9 @@ namespace ExperimentLibrary
 			WriteOutputs(records, writePath, append: append, map: map);
 		}
 
-		/// <inheritdoc cref="WriteOutputs{T}(List{T}, string, ClassMap, bool)"/>
+		/// <inheritdoc cref="WriteOutputs{T}(IEnumerable{T}, string, ClassMap, bool)"/>
 		///  <typeparam name="UMap">The classMap type to override default mapping.</typeparam>
-		public static void WriteOutputs<T, UMap>(List<T> records, string filepath, bool append = false) where UMap : ClassMap => WriteOutputs<T>(records, filepath, append: append, map: ObjectResolver.Current.Resolve<UMap>());
+		public static void WriteOutputs<T, UMap>(IEnumerable<T> records, string filepath, bool append = false) where UMap : ClassMap => WriteOutputs<T>(records, filepath, append: append, map: ObjectResolver.Current.Resolve<UMap>());
 
 		/// <summary>
 		/// Write the outputs data given full path.
@@ -113,7 +113,7 @@ namespace ExperimentLibrary
 		/// <param name="append">If true, the data will be appended to the file, otherwise it will be overwritten. Default is overriding the file.</param>
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="ArgumentException"></exception>
-		public static void WriteOutputs<T>(List<T> records, string filepath, bool append = false, ClassMap map = null)
+		public static void WriteOutputs<T>(IEnumerable<T> records, string filepath, bool append = false, ClassMap map = null)
 		{
 			if (records is null)
 			{
