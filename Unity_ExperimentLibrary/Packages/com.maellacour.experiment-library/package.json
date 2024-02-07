@@ -20,5 +20,12 @@
     "name": "Mael Lacour",
     "email": "public.dev@maellacour.com",
     "url": "https://maellacour.com"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Base",
+      "description": "Really simple demo to showcase the simplicity of the library.",
+      "path": "Samples~/Base"
+    }
+  ]
 }
