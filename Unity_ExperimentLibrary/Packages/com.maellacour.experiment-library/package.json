@@ -23,9 +23,14 @@
   },
   "samples": [
     {
-      "displayName": "Base",
-      "description": "Really simple demo to showcase the simplicity of the library.",
-      "path": "Samples~/Base"
+      "displayName": "Output Base",
+      "description": "Really simple demo to showcase the simplicity of the library to save data.",
+      "path": "Samples~/OutputBase"
+    },
+    {
+      "displayName": "Output Every Frame",
+      "description": "Sample to save data with a Listener, every frames. Also showcase the Vector3 converter.",
+      "path": "Samples~/OutputEveryFrame"
     }
   ]
 }
