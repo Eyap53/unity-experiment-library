@@ -5,8 +5,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0",
-        "org.nuget.csvhelper": "30.0.1"
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "org.nuget.csvhelper": "30.1.0"
       }
     },
     "com.unity.ai.navigation": {
@@ -164,12 +164,13 @@
       }
     },
     "org.nuget.csvhelper": {
-      "version": "30.0.1",
+      "version": "30.1.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "org.nuget.microsoft.bcl.asyncinterfaces": "1.0.0",
         "org.nuget.microsoft.bcl.hashcode": "1.0.0",
+        "org.nuget.system.linq.async": "4.0.0",
         "org.nuget.system.memory": "4.5.0",
         "org.nuget.system.threading.tasks.extensions": "4.5.2"
       },
@@ -196,6 +197,15 @@
       "depth": 2,
       "source": "registry",
       "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.linq.async": {
+      "version": "4.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.microsoft.bcl.asyncinterfaces": "1.0.0"
+      },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.system.memory": {

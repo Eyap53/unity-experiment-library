@@ -6,8 +6,8 @@
   "unity": "2021.1",
   "unityRelease": "0f1",
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "2.0.0",
-    "org.nuget.csvhelper": "30.0.1"
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
+    "org.nuget.csvhelper": "30.1.0"
   },
   "keywords": [
     "Experiment",
