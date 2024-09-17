@@ -3,17 +3,21 @@ namespace ExperimentLibrary
 	using System.IO;
 	using System.Linq;
 
+	/// <summary>
+	/// Provides extension methods for directory operations.
+	/// </summary>
 	public static class DirectoryExtensions
 	{
 		/// <summary>
-		/// Copy a directory into the destination path. Can be recursive, and can exclude specific extensions.
+		/// Copies a directory to a specified destination path. The copy can be recursive and can exclude files with specific extensions.
 		/// </summary>
-		/// <param name="sourceDirName"></param>
-		/// <param name="destDirName"></param>
-		/// <param name="copySubDirs"></param>
-		/// <param name="extensionExceptions">Prevents files with these extensions from being copied. Do not use dots.</param>
+		/// <param name="sourceDirName">The path of the directory to copy.</param>
+		/// <param name="destDirName">The path of the destination directory.</param>
+		/// <param name="copySubDirs">If true, copies subdirectories recursively.</param>
+		/// <param name="extensionExceptions">An array of file extensions to exclude from copying. Do not include dots in the extensions.</param>
+		/// <exception cref="DirectoryNotFoundException">Thrown when the source directory does not exist or could not be found.</exception>
 		/// <remarks>
-		/// Shameless copy from https://stackoverflow.com/questions/1974019/folder-copy-in-c-sharp.
+		/// This method is a modified version of a solution found at https://stackoverflow.com/questions/1974019/folder-copy-in-c-sharp.
 		/// </remarks>
 		public static void Copy(string sourceDirName, string destDirName, bool copySubDirs, string[] extensionExceptions = null)
 		{
