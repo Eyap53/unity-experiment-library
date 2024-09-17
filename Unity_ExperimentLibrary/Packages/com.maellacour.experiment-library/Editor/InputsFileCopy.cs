@@ -1,10 +1,11 @@
 namespace ExperimentLibrary.Editor
 {
 	using System.IO;
+	using UnityEditor;
 	using UnityEditor.Build;
 	using UnityEditor.Build.Reporting;
+	using UnityEngine;
 
-#if UNITY_EDITOR_WIN || UNITY_EDITOR_LINUX
 	/// <summary>
 	/// Handles the copying of input files to the build output directory after the build process.
 	/// </summary>
@@ -27,14 +28,33 @@ namespace ExperimentLibrary.Editor
 			// Only proceed if the input files folder exists and is not empty
 			if (Directory.Exists(inputsFolder) && Directory.GetFileSystemEntries(inputsFolder).Length > 0)
 			{
-				// Determine the destination folder for the input files.
-				string folderName = $"{Path.GetFileNameWithoutExtension(report.summary.outputPath)}_Data";
-				string destFolder = Path.Combine(Path.Combine(Path.GetDirectoryName(report.summary.outputPath), folderName), "Inputs");
+				string parentFolder;
+				if (report.summary.platform == BuildTarget.StandaloneWindows ||
+					report.summary.platform == BuildTarget.StandaloneWindows64 ||
+					report.summary.platform == BuildTarget.StandaloneLinux64
+				)
+				{
+					// Determine the destination folder for the input files.
+					string dataFolderName = $"{Path.GetFileNameWithoutExtension(report.summary.outputPath)}_Data";
+					parentFolder = Path.Combine(Path.GetDirectoryName(report.summary.outputPath), dataFolderName);
+				}
+				else if (report.summary.platform == BuildTarget.StandaloneOSX)
+				{
+					// Determine the destination folder for the input files.
+					parentFolder = Path.Combine(report.summary.outputPath, "Contents");
+				}
+				else
+				{
+					// Log a warning if the platform is not supported.
+					Debug.LogWarning($"ExperimentLibrary: Platform {report.summary.platform} is not supported. Input files will not be copied.");
+					return;
+				}
 
+				string destinationFolder = Path.Combine(parentFolder, "Inputs");
 				// Copy the input files to the destination folder, excluding files with the "meta" extension.
 				DirectoryExtensions.Copy(
 								sourceDirName: ExperimentInputs.GetInputsFolder(),
-								destDirName: destFolder,
+								destDirName: destinationFolder,
 								copySubDirs: true,
 								extensionExceptions: new string[] { "meta" }
 				);
@@ -45,5 +65,4 @@ namespace ExperimentLibrary.Editor
 			}
 		}
 	}
-#endif
 }
