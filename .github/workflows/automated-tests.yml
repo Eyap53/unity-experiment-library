@@ -3,17 +3,17 @@ name: Actions 😎
 on: [push, pull_request]
 
 jobs:
-  build:
+  buildForAllSupportedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - StandaloneLinux64 # Build a Linux 64-bit standalone.
-    outputs:
-      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
       # Checkout (without LFS)
       - name: Checkout repository
