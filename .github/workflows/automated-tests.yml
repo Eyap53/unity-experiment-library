@@ -4,8 +4,16 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Build the project
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+    outputs:
+      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
       # Checkout (without LFS)
       - name: Checkout repository
@@ -32,12 +40,16 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key:
+            Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**',
+            'ProjectSettings/**') }}
           restore-keys: |
+            Library-${{ matrix.targetPlatform }}-
             Library-
 
       # Test
       - name: Run tests
+        id: myTestStep
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -47,6 +59,19 @@ jobs:
           projectPath: Unity_ExperimentLibrary
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Test results ${{ matrix.targetPlatform }}
+          path: ${{ steps.myTestStep.outputs.artifactsPath }}
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Coverage results
+          path: ${{ steps.myTestStep.outputs.coveragePath }}
+
       # Build
       - name: Build project
         uses: game-ci/unity-builder@v4
@@ -55,11 +80,12 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: StandaloneWindows64
+          targetPlatform: ${{ matrix.targetPlatform }}
+          versioning: Semantic
           projectPath: Unity_ExperimentLibrary
 
       # Output
       - uses: actions/upload-artifact@v3
         with:
-          name: Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
