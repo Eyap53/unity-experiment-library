@@ -4,7 +4,13 @@ namespace ExperimentLibrary
 	using System.IO;
 
 	public static class ExperimentUtilities
-    {
+	{
+		/// <summary>
+		/// Adds a ".csv" extension to the given file name if it does not already have one.
+		/// </summary>
+		/// <param name="fileName">The name of the file.</param>
+		/// <returns>The file name with a ".csv" extension.</returns>
+		/// <exception cref="ArgumentException">Thrown when <paramref name="fileName"/> is null or empty.</exception>
 		public static string AddCsvExtension(string fileName)
 		{
 			if (string.IsNullOrEmpty(fileName))
@@ -28,5 +34,5 @@ namespace ExperimentLibrary
 				return fileName;
 			}
 		}
-    }
+	}
 }

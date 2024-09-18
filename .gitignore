@@ -83,4 +83,4 @@ crashlytics-build.properties
 
 # Projet specific
 Outputs/
-Inputs/
+Outputs.meta
