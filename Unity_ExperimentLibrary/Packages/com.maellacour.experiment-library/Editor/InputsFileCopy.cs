@@ -7,9 +7,9 @@ namespace ExperimentLibrary.Editor
 	using UnityEngine;
 
 	/// <summary>
-	/// Handles the copying of input files to the build output directory after the build process.
+	/// Handles the copying of input files to the build output directory before the build process.
 	/// </summary>
-	public class InputsFileCopy : IPostprocessBuildWithReport
+	public class InputsFileCopy : IPreprocessBuildWithReport
 	{
 		/// <summary>
 		/// Gets the callback order for the post-process build step.
@@ -17,10 +17,10 @@ namespace ExperimentLibrary.Editor
 		public int callbackOrder { get { return 0; } }
 
 		/// <summary>
-		/// Called after the build process is complete. Copies the input files to the build output directory.
+		/// Called before the build process is complete. Copies the input files to the build output directory.
 		/// </summary>
 		/// <param name="report">The report containing information about the build.</param>
-		public void OnPostprocessBuild(BuildReport report)
+		public void OnPreprocessBuild(BuildReport report)
 		{
 			// Get the folder containing the input files.
 			string inputsFolder = ExperimentInputs.GetInputsFolder();
