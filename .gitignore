@@ -81,6 +81,10 @@ crashlytics-build.properties
 **/[Aa]ssets/[Ss]treamingAssets/aa.meta
 **/[Aa]ssets/[Ss]treamingAssets/aa/*
 
+# Game-ci automated build
+
+/artifacts
+
 # Projet specific
 Outputs/
 Outputs.meta
