@@ -6,8 +6,7 @@ jobs:
   buildForAllSupportedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: write-all
     strategy:
       fail-fast: false
       matrix:
