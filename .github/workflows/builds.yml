@@ -1,6 +1,15 @@
 name: Builds
 
-on: [push, pull_request]
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Test scenario tags"
+        required: true
+        type: string
 
 jobs:
   buildForAllSupportedPlatforms:
