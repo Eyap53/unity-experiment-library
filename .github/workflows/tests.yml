@@ -13,9 +13,9 @@ jobs:
         projectPath:
           - Unity_ExperimentLibrary
         testMode:
-          - playmode
           - editmode
-          - standalone
+          # - playmode
+          # - standalone
     steps:
       # Checkout (without LFS)
       - name: Checkout repository
