@@ -1,16 +1,26 @@
-name: Actions 😎
+name: Builds
 
-on: [push, pull_request]
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Test scenario tags"
+        required: true
+        type: string
 
 jobs:
   buildForAllSupportedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: write-all
     strategy:
       fail-fast: false
       matrix:
+        projectPath:
+          - Unity_ExperimentLibrary
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows # Build a Windows standalone.
@@ -41,7 +51,7 @@ jobs:
       # Cache
       - uses: actions/cache@v3
         with:
-          path: Library
+          path: ${{ matrix.projectPath }}/Library
           key:
             Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**',
             'ProjectSettings/**') }}
@@ -49,30 +59,9 @@ jobs:
             Library-${{ matrix.targetPlatform }}-
             Library-
 
-      # Test
-      - name: Run tests
-        id: myTestStep
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: Unity_ExperimentLibrary
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Test results ${{ matrix.targetPlatform }}
-          path: ${{ steps.myTestStep.outputs.artifactsPath }}
-
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: Coverage results
-          path: ${{ steps.myTestStep.outputs.coveragePath }}
+      # Android specific : Free disk space
+      - if: matrix.targetPlatform == 'Android'
+        uses: jlumbroso/free-disk-space@v1.3.1
 
       # Build
       - name: Build project
@@ -83,8 +72,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-          versioning: Semantic
-          projectPath: Unity_ExperimentLibrary
+          projectPath: ${{ matrix.projectPath }}
 
       # Output
       - uses: actions/upload-artifact@v3
