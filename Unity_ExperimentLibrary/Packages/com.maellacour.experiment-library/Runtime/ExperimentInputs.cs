@@ -20,7 +20,7 @@ namespace ExperimentLibrary
 		/// <returns>The path to the inputs folder.</returns>
 		public static string GetInputsFolder()
 		{
-			return Path.Combine(@"" + Application.dataPath, "Inputs");
+			return Path.Combine(@"" + Application.streamingAssetsPath, "Inputs");
 		}
 
 		/// <summary>

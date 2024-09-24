@@ -19,7 +19,7 @@ namespace ExperimentLibrary
 		public static string GetOutputsFolder()
 		{
 			//'@' : prevent the escaping of characters with \. Really useful for paths.
-			return Path.Combine(@"" + Application.dataPath, "Outputs");
+			return Path.Combine(@"" + Application.streamingAssetsPath, "Outputs");
 		}
 
 		/// <summary>
