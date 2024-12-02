@@ -118,7 +118,7 @@ namespace ExperimentLibrary
 			}
 			if (!File.Exists(filePath))
 			{
-				throw new ArgumentException($"File does not exist at '{nameof(filePath)}'.", nameof(filePath));
+				throw new ArgumentException($"File does not exist at '{filePath}'.", nameof(filePath));
 			}
 
 			T[] result;

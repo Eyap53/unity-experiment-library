@@ -1,13 +1,13 @@
 {
   "name": "com.maellacour.experiment-library",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "displayName": "Experiment Library",
   "description": "A library to easily build experiment applications, and manage the inputs and outputs files in a standardized and clever way",
   "unity": "2021.1",
   "unityRelease": "0f1",
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "org.nuget.csvhelper": "30.1.0"
+    "org.nuget.csvhelper": "33.0.1"
   },
   "keywords": [
     "Experiment",
