@@ -5,11 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.5.1] - 2024-12-02
+
+### Fixed
+
+- Inputs: Improve error message for missing file in ReadCsvInput method.
+
+## [2.5.0] - 2024-09-24
 
 ### Changed
 
-- **Breaking change**: Refactor file paths for ExperimentLibrary - Use inputs and outputs
+- **Breaking change**: Refactor file paths for ExperimentLibrary - Use inputs and outputs.
 
 ## [2.4.1] - 2024-09-18
 
