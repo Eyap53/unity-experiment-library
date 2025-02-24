@@ -1,5 +1,23 @@
 {
+  "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [
+        "org.nuget"
+      ]
+    },
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.unity-atoms"
+      ]
+    }
+  ],
   "dependencies": {
+    "com.unity-atoms.unity-atoms-base-atoms": "4.5.0",
+    "com.unity-atoms.unity-atoms-core": "4.5.0",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.inputsystem": "1.11.2",
     "com.unity.multiplayer.center": "1.0.0",
@@ -40,14 +58,5 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  },
-  "scopedRegistries": [
-    {
-      "name": "Unity NuGet",
-      "url": "https://unitynuget-registry.azurewebsites.net",
-      "scopes": [
-        "org.nuget"
-      ]
-    }
-  ]
+  }
 }
