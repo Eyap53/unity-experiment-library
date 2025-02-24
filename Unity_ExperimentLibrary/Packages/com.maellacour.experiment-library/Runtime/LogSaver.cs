@@ -4,17 +4,39 @@ namespace ExperimentLibrary
 	using System.IO;
 	using UnityEngine;
 
-	public class LogSaver : MonoBehaviour
+	/// <summary>
+	/// Abstract base class for saving Unity console logs to participant-specific folders.
+	/// </summary>
+	public abstract class LogSaver : MonoBehaviour
 	{
-		[SerializeField]
-		private ParticipantIndexSO _participantIndexSO;
+		protected bool _hasQuit = false;
 
-		void OnDestroy()
+		/// <summary>
+		/// Handles cleanup and log saving when the component is destroyed.
+		/// </summary>
+		protected virtual void OnDestroy()
 		{
-			// Save the Log inside participant folder.
+			SaveLogsIfNeeded();
+		}
+
+		/// <summary>
+		/// Handles cleanup and log saving when the application is quitting.
+		/// </summary>
+		protected virtual void OnApplicationQuit()
+		{
+			SaveLogsIfNeeded();
+			_hasQuit = true;
+		}
+
+		/// <summary>
+		/// Saves the current Unity log file to the participant's folder with a timestamp.
+		/// </summary>
+		/// <param name="participantId">The ID of the participant whose folder will contain the log.</param>
+		public void SaveLogs(int participantId)
+		{
 			string logFilePath = Application.consoleLogPath;
 			string saveLogFileName = string.Format("LogSave.{0}.log", DateTime.Now.ToString("yy-MM-dd.HH-mm-ss"));
-			string participantFolderPath = ExperimentOutputs.GetParticipantFolder(_participantIndexSO.participantIndex);
+			string participantFolderPath = ExperimentOutputs.GetParticipantFolder(participantId);
 			string saveLogFilePath = Path.Combine(participantFolderPath, saveLogFileName);
 
 			try
@@ -24,9 +46,14 @@ namespace ExperimentLibrary
 			}
 			catch (System.Exception e)
 			{
-				Debug.LogError("Couldn't save the logs !");
+				Debug.LogError("LogSaver: Couldn't save the logs!");
 				Debug.LogException(e);
 			}
 		}
+
+		/// <summary>
+		/// Determines if logs need to be saved and saves them if necessary.
+		/// </summary>
+		protected abstract void SaveLogsIfNeeded();
 	}
 }
