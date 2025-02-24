@@ -9,6 +9,10 @@
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "org.nuget.csvhelper": "33.0.1"
   },
+  "optionalDependencies": {
+    "com.unity-atoms.unity-atoms-base-atoms": "4.5.0",
+    "com.unity-atoms.unity-atoms-core": "4.5.0"
+  },
   "keywords": [
     "Experiment",
     "File Management",
