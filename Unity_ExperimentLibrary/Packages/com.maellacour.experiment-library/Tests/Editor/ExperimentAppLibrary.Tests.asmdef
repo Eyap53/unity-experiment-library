@@ -4,7 +4,9 @@
     "references": [
         "ExperimentLibrary",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "UnityAtoms.UnityAtomsCore.Runtime",
+        "UnityAtoms.UnityAtomsBaseAtoms.Runtime"
     ],
     "includePlatforms": [
         "Editor"
