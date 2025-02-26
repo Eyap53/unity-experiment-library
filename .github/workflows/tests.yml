@@ -14,7 +14,7 @@ jobs:
           - Unity_ExperimentLibrary
         testMode:
           - editmode
-          # - playmode
+          - playmode
           # - standalone
     steps:
       # Checkout (without LFS)
@@ -66,12 +66,12 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.tests.outputs.artifactsPath }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Coverage results for ${{ matrix.testMode }}
